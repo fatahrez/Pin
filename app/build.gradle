@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -32,16 +34,14 @@ android {
                     deepLinkHost: ""
             ]
             applicationIdSuffix ".debug"
-            buildConfigField "String", "BASE_URL", '"http://10.0.2.2"'
         }
         local {
             initWith debug
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [
-                    deepLinkHost: "127.0.0.1:8000"
+                    deepLinkHost: "10.0.2.2"
             ]
-            buildConfigField "String", "BASE_URL", '"http://10.0.2.2"'
             applicationIdSuffix ".local"
         }
     }
@@ -73,6 +73,19 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+
+    //OkHttp BOM
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:2.44.2"
+    implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
+
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
