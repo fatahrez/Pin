@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.Android.nameSpace
+    namespace = "com.fatahrez.common"
     compileSdk = Dependencies.Android.compileSdkVersion
 
     defaultConfig {
@@ -26,13 +26,18 @@ android {
                     "proguard-android-optimize.txt"),
                     "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "http://10.0.2.2/api/v1/")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
         }
         getByName("debug") {
-            buildConfigField("String", "BASE_URL", "http://10.0.2.2/api/v1/")
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
         }
         register("local") {
-            buildConfigField("String", "BASE_URL", "http://10.0.2.2/api/v1/")
+            initWith(getByName("debug"))
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
         }
     }
     compileOptions {

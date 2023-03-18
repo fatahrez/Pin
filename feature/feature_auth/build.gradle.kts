@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.Android.nameSpace
+    namespace = "com.fatahrez.feature_auth"
     compileSdk = Dependencies.Android.compileSdkVersion
 
     defaultConfig {
@@ -43,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
     packagingOptions {
         resources {
