@@ -24,16 +24,28 @@ class SignUpViewModel @Inject constructor(
             authRepository.postRegisterUser(signUpRequest).collect { result ->
                 when(result) {
                     is ResultWrapper.Loading -> {
-
+                        _state.value = state.value.copy(
+                            signUpResponse = null,
+                            isLoading = true
+                        )
                     }
                     is ResultWrapper.Success -> {
-
+                        _state.value = state.value.copy(
+                            signUpResponse = result.value,
+                            isLoading = false
+                        )
                     }
                     is ResultWrapper.NetworkError -> {
-
+                        _state.value = state.value.copy(
+                            signUpResponse = null,
+                            isLoading = false
+                        )
                     }
                     is ResultWrapper.GenericError -> {
-
+                        _state.value = state.value.copy(
+                            signUpResponse = null,
+                            isLoading = false
+                        )
                     }
                 }
             }

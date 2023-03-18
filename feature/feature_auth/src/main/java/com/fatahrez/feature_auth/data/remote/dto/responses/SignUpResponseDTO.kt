@@ -8,14 +8,14 @@ data class SignUpResponseDTO(
     @SerializedName("first_name")
     val firstName: String,
     val email:String,
-    val pkid: Int
+    val id: String
 ) {
     fun toSignUpResponse(): SignUpResponse {
         return SignUpResponse(
             username = username,
             firstName = firstName,
             email = email,
-            pkid = pkid
+            id = id
         )
     }
 }

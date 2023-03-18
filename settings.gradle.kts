@@ -13,6 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Pin"
-include ':app'
-include ':feature:feature_auth'
-include ':common'
+include (
+        ":app",
+        ":common",
+        ":feature:feature_auth"
+)
