@@ -24,10 +24,20 @@ fun Onboarding() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+        val drawableImageList = intArrayOf(
+            R.drawable.onboarding_image,
+            R.drawable.onboarding_image2,
+            R.drawable.onboarding_image3,
+            R.drawable.onboarding_image4,
+            R.drawable.onboarding_image5,
+            R.drawable.onboarding_image6,
+            R.drawable.onboarding_image7,
+            R.drawable.onboarding_image8,
+        )
         val images = (0..7).map {
             StaggeredListItem(
                 height = Random.nextInt(130, 220).dp,
-                image = R.drawable.onboarding_photo
+                image = drawableImageList.random()
             )
         }
         LazyVerticalStaggeredGrid(
@@ -36,8 +46,8 @@ fun Onboarding() {
                 .fillMaxWidth()
                 .height(300.dp),
             contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             state = lazyListState
         ) {
             items(images) { item ->
@@ -52,6 +62,7 @@ fun Onboarding() {
 
 @OptIn(ExperimentalFoundationApi::class)
 private tailrec suspend fun autoScroll(lazyListState: LazyStaggeredGridState) {
+    delay(DELAY_BETWEEN_SCROLL_MS)
     lazyListState.scroll(MutatePriority.PreventUserInput) {
         scrollBy(SCROLL_DX)
     }
@@ -78,5 +89,5 @@ fun RandomColorBox(item: StaggeredListItem) {
     }
 }
 
-private const val DELAY_BETWEEN_SCROLL_MS = 20L
+private const val DELAY_BETWEEN_SCROLL_MS = 50L
 private const val SCROLL_DX = 1f
