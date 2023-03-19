@@ -2,17 +2,22 @@ package com.fatahrez.feature_auth.presentation.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
 import kotlinx.coroutines.delay
@@ -27,8 +32,7 @@ fun Onboarding() {
     val lazyListState = rememberLazyStaggeredGridState()
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(height/3)
+            .fillMaxSize()
     ) {
         val drawableImageList = intArrayOf(
             R.drawable.onboarding_image,
@@ -50,8 +54,12 @@ fun Onboarding() {
             columns = StaggeredGridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp),
-            contentPadding = PaddingValues(16.dp),
+                .height(height / 3)
+                .verticalFadingEdge(
+                    lazyListState,
+                    height/3
+                ),
+            contentPadding = PaddingValues(4.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
             state = lazyListState
