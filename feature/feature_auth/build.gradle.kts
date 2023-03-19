@@ -43,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = Dependencies.Android.kotlinComposeCompilerVersion
     }
     packagingOptions {
         resources {
@@ -80,6 +80,10 @@ dependencies {
     implementation(Dependencies.UI.composeActivity)
     implementation(Dependencies.UI.composeUI)
     implementation(Dependencies.UI.composeToolingPreview)
+
+    // Coil
+    implementation(Dependencies.ComposeUI.coil)
+    implementation(Dependencies.ComposeUI.coilCompose)
 
     testImplementation(Dependencies.Testing.jUnit)
     androidTestImplementation(Dependencies.Testing.extJUnit)

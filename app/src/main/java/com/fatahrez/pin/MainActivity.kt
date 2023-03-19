@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.fatahrez.feature_auth.presentation.onboarding.Onboarding
 import com.fatahrez.feature_auth.presentation.sign_up.SignUpScreen
 import com.fatahrez.pin.ui.theme.PinTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +21,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PinTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SignUpScreen()
+                    Onboarding()
                 }
             }
         }

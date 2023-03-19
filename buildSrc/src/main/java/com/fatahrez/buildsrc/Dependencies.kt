@@ -11,12 +11,13 @@ object Versions {
     const val corektx = "1.9.0"
     const val lifecycle = "2.6.0"
     const val composeActivity = "1.6.1"
-    const val compose = "1.3.3"
+    const val compose = "1.4.0-beta01"
     const val material = "1.1.0-alpha08"
     const val jUnit = "4.13.2"
     const val extJUnit = "1.1.5"
     const val espresso = "3.5.1"
-    const val uiTestJunit = "1.3.3"
+    const val uiTestJunit = "1.4.0-beta01"
+    const val coil = "2.2.2"
 }
 
 object Dependencies {
@@ -33,6 +34,7 @@ object Dependencies {
         val targetSdk = 33
         val versionCode = 1
         val versionName = "1.0"
+        val kotlinComposeCompilerVersion = "1.4.2"
     }
 
     object NetworkLibs {
@@ -68,6 +70,11 @@ object Dependencies {
         val uiTestJunit = "androidx.compose.ui:ui-test-junit4:${Versions.uiTestJunit}"
         val composeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
         val composeUiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
+    }
+
+    object ComposeUI {
+        val coil = "io.coil-kt:coil:${Versions.coil}"
+        val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
     }
 
 }
