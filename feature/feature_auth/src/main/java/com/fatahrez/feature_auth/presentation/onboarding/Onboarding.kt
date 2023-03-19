@@ -1,5 +1,6 @@
 package com.fatahrez.feature_auth.presentation.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,17 +19,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
 import kotlinx.coroutines.delay
+import kotlin.math.log
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -36,6 +38,8 @@ fun Onboarding() {
     // Get screen height to give Lazy Grid an adaptive height
     val configuration = LocalConfiguration.current
     val height = configuration.screenHeightDp.dp
+
+    val viewModel : EmailViewModel = hiltViewModel()
 
     val lazyListState = rememberLazyStaggeredGridState()
     Column(
@@ -84,13 +88,13 @@ fun Onboarding() {
         }
         Spacer(modifier = Modifier.height(8.dp))
         WelcomeSection()
-        AuthSection()
+        AuthSection(viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthSection() {
+fun AuthSection(viewModel: EmailViewModel) {
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
     Column(
         Modifier
@@ -137,7 +141,13 @@ fun AuthSection() {
                 .clip(RoundedCornerShape(50)),
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             onClick = {
+                viewModel.getEmailStatus(inputValue.value.text)
 
+                if(viewModel.state.value.emailResponse?.message == true) {
+                    // TODO - Login
+                } else {
+                    // TODO - Sign Up
+                }
             }
         ) {
             Text(
