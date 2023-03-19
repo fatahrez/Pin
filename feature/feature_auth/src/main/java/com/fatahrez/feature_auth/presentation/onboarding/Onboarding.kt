@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -44,24 +45,24 @@ fun Onboarding() {
             R.drawable.onboarding_image7,
             R.drawable.onboarding_image8,
         )
-        val images = (0..7).map {
+        val images = (0..14).map {
             StaggeredListItem(
                 height = Random.nextInt(130, 220).dp,
                 image = drawableImageList.random()
             )
         }
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(2),
+            columns = StaggeredGridCells.Fixed(3),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height / 3)
+                .height(height / 2.65f)
                 .verticalFadingEdge(
                     lazyListState,
-                    height/3
+                    height / 2.65f
                 ),
-            contentPadding = PaddingValues(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             state = lazyListState
         ) {
             items(images) { item ->
@@ -71,6 +72,24 @@ fun Onboarding() {
                 }
             }
         }
+
+        WelcomeSection()
+    }
+}
+
+@Composable
+fun WelcomeSection() {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        AsyncImage(
+            model = R.drawable.pinterest_logo,
+            contentDescription = "Pinterest Logo",
+            modifier = Modifier
+                .size(88.dp)
+                .offset(y = (-10).dp)
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
 
