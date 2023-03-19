@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -47,7 +48,7 @@ fun Onboarding() {
         )
         val images = (0..14).map {
             StaggeredListItem(
-                height = Random.nextInt(130, 220).dp,
+                height = Random.nextInt(100, 180).dp,
                 image = drawableImageList.random()
             )
         }
@@ -60,7 +61,10 @@ fun Onboarding() {
                     lazyListState,
                     height / 2.65f
                 ),
-            contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+            contentPadding = PaddingValues(
+                vertical = 4.dp,
+                horizontal = 16.dp
+            ),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = lazyListState
@@ -90,6 +94,7 @@ fun WelcomeSection() {
                 .offset(y = (-10).dp)
                 .align(Alignment.CenterHorizontally)
         )
+//        Text(text =)
     }
 }
 

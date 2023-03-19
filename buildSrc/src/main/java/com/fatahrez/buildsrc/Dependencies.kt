@@ -18,6 +18,7 @@ object Versions {
     const val espresso = "3.5.1"
     const val uiTestJunit = "1.4.0-beta01"
     const val coil = "2.2.2"
+    const val systemUIController = "0.26.0-alpha"
 }
 
 object Dependencies {
@@ -75,6 +76,7 @@ object Dependencies {
     object ComposeUI {
         val coil = "io.coil-kt:coil:${Versions.coil}"
         val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
+        val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:${Versions.systemUIController}"
     }
 
 }

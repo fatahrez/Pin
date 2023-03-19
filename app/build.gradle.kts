@@ -89,6 +89,8 @@ dependencies {
     implementation(Dependencies.UI.composeToolingPreview)
     implementation(Dependencies.UI.materialDesign)
 
+    implementation(Dependencies.ComposeUI.systemUiController)
+
     testImplementation(Dependencies.Testing.jUnit)
     androidTestImplementation(Dependencies.Testing.extJUnit)
     androidTestImplementation(Dependencies.Testing.espressoCore)
