@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlin.random.Random
@@ -19,10 +20,15 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Onboarding() {
+    // Get screen height to give Lazy Grid an adaptive height
+    val configuration = LocalConfiguration.current
+    val height = configuration.screenHeightDp.dp
+
     val lazyListState = rememberLazyStaggeredGridState()
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .height(height/3)
     ) {
         val drawableImageList = intArrayOf(
             R.drawable.onboarding_image,
