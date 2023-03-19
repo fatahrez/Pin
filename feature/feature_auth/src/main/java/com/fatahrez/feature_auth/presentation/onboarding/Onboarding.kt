@@ -2,21 +2,27 @@ package com.fatahrez.feature_auth.presentation.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.fatahrez.common.util.verticalFadingEdge
@@ -70,14 +76,75 @@ fun Onboarding() {
             state = lazyListState
         ) {
             items(images) { item ->
-                RandomColorBox(item)
+                RandomImageBox(item)
                 LaunchedEffect(key1 = Unit) {
                     autoScroll(lazyListState)
                 }
             }
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
         WelcomeSection()
+        AuthSection()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AuthSection() {
+    val inputValue = remember { mutableStateOf(TextFieldValue()) }
+    Column(
+        Modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(
+            value = inputValue.value,
+            onValueChange = { inputValue.value = it },
+            placeholder = {
+                Text(
+                    text = "Email address",
+                    modifier = Modifier
+                        .padding(start = 16.dp),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            },
+            modifier = Modifier
+                .padding(horizontal = 36.dp, vertical = 24.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(50)),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrect = false,
+                keyboardType = KeyboardType.Email
+            ),
+            textStyle = MaterialTheme.typography.bodyLarge,
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                if(isSystemInDarkTheme()) Color.White else Color.Black,
+                containerColor = if(isSystemInDarkTheme()) Color.DarkGray else Color(0xFFF0F0F0),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            )
+        )
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(horizontal = 36.dp, vertical = 0.dp)
+                .clip(RoundedCornerShape(50)),
+            colors = ButtonDefaults.buttonColors(contentColor = Color.White),
+            onClick = {
+
+            }
+        ) {
+            Text(
+                text = "Continue",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
     }
 }
 
@@ -94,7 +161,12 @@ fun WelcomeSection() {
                 .offset(y = (-10).dp)
                 .align(Alignment.CenterHorizontally)
         )
-//        Text(text =)
+        Text(
+            text = "Welcome to Pinterest",
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -110,7 +182,7 @@ private tailrec suspend fun autoScroll(lazyListState: LazyStaggeredGridState) {
 }
 
 @Composable
-fun RandomColorBox(item: StaggeredListItem) {
+fun RandomImageBox(item: StaggeredListItem) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
