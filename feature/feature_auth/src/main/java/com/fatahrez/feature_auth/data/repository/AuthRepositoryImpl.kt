@@ -7,10 +7,7 @@ import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
 import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignInRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
-import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
-import com.fatahrez.feature_auth.domain.models.responses.ProfileResponse
-import com.fatahrez.feature_auth.domain.models.responses.SignInResponse
-import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
+import com.fatahrez.feature_auth.domain.models.responses.*
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +38,13 @@ class AuthRepositoryImpl(
             username,
             profileRequest.toProfileRequestDTO()
         ).toProfileResponse()
+    }
+
+    override suspend fun getCountries():
+            Flow<ResultWrapper<List<CountryResponse>>> = safeApiCall(ioDispatchers) {
+        authAPI.getCountries().map {
+            it.toCountryResponse()
+        }
     }
 
 }

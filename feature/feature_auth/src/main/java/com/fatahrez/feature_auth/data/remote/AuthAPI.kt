@@ -4,16 +4,15 @@ import com.fatahrez.feature_auth.data.remote.dto.requests.EmailRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.requests.ProfileRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.requests.SignInRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.requests.SignUpRequestDTO
-import com.fatahrez.feature_auth.data.remote.dto.responses.EmailResponseDTO
-import com.fatahrez.feature_auth.data.remote.dto.responses.ProfileResponseDTO
-import com.fatahrez.feature_auth.data.remote.dto.responses.SignInResponseDTO
-import com.fatahrez.feature_auth.data.remote.dto.responses.SignUpResponseDTO
+import com.fatahrez.feature_auth.data.remote.dto.responses.*
 import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignInRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
+import com.fatahrez.feature_auth.domain.models.responses.CountryResponse
 import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
 import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -39,5 +38,8 @@ interface AuthAPI {
         @Path("username") username: String,
         @Body profileRequestDTO: ProfileRequestDTO
     ): ProfileResponseDTO
+
+    @GET("profile/countries/")
+    suspend fun getCountries(): List<CountryResponseDTO>
 
 }

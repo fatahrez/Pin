@@ -27,6 +27,6 @@ interface AuthRepository {
         profileRequest: ProfileRequest
     ): Flow<ResultWrapper<ProfileResponse>>
 
-    suspend fun getCountries(): Flow<ResultWrapper<CountryResponse>>
+    suspend fun getCountries(): Flow<ResultWrapper<List<CountryResponse>>>
 
 }
