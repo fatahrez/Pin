@@ -93,8 +93,8 @@ fun SignUpScreen3(
             Log.e("TAG", "SignUpScreen3: errors")
         } else {
             if (state.signUpResponse != null) {
-                sharedPreferences.edit {
-                    sharedPreferences.edit {
+                viewModel.sharedPreferences.edit {
+                    viewModel.sharedPreferences.edit {
                         putString(Constants.ACCESS_TOKEN, state.signUpResponse.token.access)
                         putString(Constants.REFRESH_TOKEN, state.signUpResponse.token.refresh)
                     }
@@ -131,4 +131,3 @@ fun SignUpScreen3(
     }
 
 }
-@Inject lateinit var sharedPreferences: SharedPreferences

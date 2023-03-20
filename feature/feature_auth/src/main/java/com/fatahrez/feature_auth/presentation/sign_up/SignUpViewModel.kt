@@ -1,9 +1,11 @@
 package com.fatahrez.feature_auth.presentation.sign_up
 
+import android.content.SharedPreferences
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fatahrez.common.util.Constants
 import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
@@ -13,12 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    sharedPreferences: SharedPreferences
 ): ViewModel() {
 
     private val _state = mutableStateOf(SignUpState())
     val state: State<SignUpState> get() = _state
 
+    val sharedPreferences = sharedPreferences
     fun signUpUser(signUpRequest: SignUpRequest) {
         viewModelScope.launch {
             authRepository.postRegisterUser(signUpRequest).collect { result ->
