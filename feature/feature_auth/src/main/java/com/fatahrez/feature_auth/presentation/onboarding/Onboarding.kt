@@ -1,5 +1,6 @@
 package com.fatahrez.feature_auth.presentation.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -102,6 +103,23 @@ fun Onboarding(
 @Composable
 fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
+    val state = viewModel.state.value
+    if(state.isLoading) {
+        Log.i("TAG", "AuthSection: loading")
+    } else if (state.errors != null){
+        Log.e("TAG", "AuthSection: ${state.errors}")
+    } else {
+        if (state.emailResponse != null) {
+            if (state.emailResponse.message) {
+                Log.i("TAG", "AuthSection: login")
+            } else {
+                navigator
+                    .navigate(SignUpScreenDestination(email = inputValue.value.text))
+            }
+        }
+    }
+
     Column(
         Modifier
             .fillMaxWidth(),
@@ -148,12 +166,6 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             onClick = {
                 viewModel.getEmailStatus(inputValue.value.text)
-
-                if(viewModel.state.value.emailResponse?.message == true) {
-                    // TODO - Login
-                } else {
-                    navigator.navigate(SignUpScreenDestination(email = inputValue.value.text))
-                }
             }
         ) {
             Text(
@@ -161,6 +173,8 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 style = MaterialTheme.typography.bodyLarge
             )
         }
+
+
     }
 }
 
