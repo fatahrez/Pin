@@ -18,11 +18,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.fatahrez.common.util.Constants
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen4Destination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
@@ -90,6 +93,12 @@ fun SignUpScreen3(
             Log.e("TAG", "SignUpScreen3: errors")
         } else {
             if (state.signUpResponse != null) {
+                sharedPreferences.edit {
+                    sharedPreferences.edit {
+                        putString(Constants.ACCESS_TOKEN, state.signUpResponse.token.access)
+                        putString(Constants.REFRESH_TOKEN, state.signUpResponse.token.refresh)
+                    }
+                }
                 navigator.navigate(
                     SignUpScreen4Destination(
                         name = name,
@@ -122,4 +131,4 @@ fun SignUpScreen3(
     }
 
 }
-lateinit var sharedPreferences: SharedPreferences
+@Inject lateinit var sharedPreferences: SharedPreferences
