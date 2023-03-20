@@ -1,5 +1,6 @@
 package com.fatahrez.feature_auth.presentation.sign_up
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -121,3 +122,4 @@ fun SignUpScreen3(
     }
 
 }
+lateinit var sharedPreferences: SharedPreferences
