@@ -42,4 +42,5 @@ class AuthRepositoryImpl(
             profileRequest.toProfileRequestDTO()
         ).toProfileResponse()
     }
+
 }
