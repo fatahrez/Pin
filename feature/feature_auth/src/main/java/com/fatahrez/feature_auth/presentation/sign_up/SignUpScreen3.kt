@@ -102,6 +102,7 @@ fun SignUpScreen3(
                 navigator.navigate(
                     SignUpScreen4Destination(
                         name = name,
+                        username = inputValue.value.text
                     )
                 )
             }
