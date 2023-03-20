@@ -2,6 +2,9 @@ buildscript {
     dependencies {
         classpath(com.fatahrez.buildsrc.Dependencies.ProjectPlugins.hiltAndroidPlugin)
     }
+    repositories {
+        mavenCentral()
+    }
 }
 
 plugins {

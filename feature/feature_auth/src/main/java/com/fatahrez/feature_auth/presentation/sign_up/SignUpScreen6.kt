@@ -23,9 +23,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun SignUpScreen4(
-    name: String,
+fun SignUpScreen6(
     username: String,
+    age: String,
+    gender: String,
     navigator: DestinationsNavigator
 ) {
 
@@ -41,15 +42,13 @@ fun SignUpScreen4(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Hi, $name! How old are you?",
+                    text = "What is your country or region?",
                     style = MaterialTheme.typography.bodyLarge
                 )
 
                 Text(
-                    text = "We collect this info to help provide a better experience for the " +
-                            "younger people in our community. We'll also use date of birth to " +
-                            "help personalise your recommendations and ads. \n\n" +
-                            "It will not be displayed publicly.",
+                    text = "This helps us find you more relevant content.\n" +
+                            "We won't show it on your profile.",
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -98,13 +97,12 @@ fun SignUpScreen4(
                     )
                 )
             },
-            colors = ButtonDefaults.buttonColors
-                (contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
-                containerColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
+            colors = ButtonDefaults.buttonColors(
+                contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black
             )
         ) {
             Text(text = "Next")
         }
     }
-    
+
 }

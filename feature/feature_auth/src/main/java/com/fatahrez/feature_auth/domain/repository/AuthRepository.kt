@@ -5,10 +5,7 @@ import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
 import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignInRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
-import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
-import com.fatahrez.feature_auth.domain.models.responses.ProfileResponse
-import com.fatahrez.feature_auth.domain.models.responses.SignInResponse
-import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
+import com.fatahrez.feature_auth.domain.models.responses.*
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
@@ -29,5 +26,7 @@ interface AuthRepository {
         username: String,
         profileRequest: ProfileRequest
     ): Flow<ResultWrapper<ProfileResponse>>
+
+    suspend fun getCountries(): Flow<ResultWrapper<CountryResponse>>
 
 }
