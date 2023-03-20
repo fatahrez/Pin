@@ -2,6 +2,7 @@ package com.fatahrez.feature_auth.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.fatahrez.common.shared.remote.AuthInterceptor
 import com.fatahrez.common.shared.remote.HttpClient
 import com.fatahrez.common.shared.remote.HttpLogger
 import com.fatahrez.common.util.Constants
@@ -37,11 +38,17 @@ object AuthModule {
     fun providesLoggingInterceptor(): HttpLoggingInterceptor = HttpLogger.create()
 
     @Provides
+    fun providesAuthInterceptors(
+        sharedPreferences: SharedPreferences
+    ): AuthInterceptor = AuthInterceptor(sharedPreferences)
+    @Provides
     fun providesOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return HttpClient.setupOkHttpClient(
-            httpLoggingInterceptor
+            httpLoggingInterceptor,
+            authInterceptor
         )
     }
 
