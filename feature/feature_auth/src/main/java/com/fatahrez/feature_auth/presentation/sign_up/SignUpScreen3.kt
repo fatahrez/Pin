@@ -9,24 +9,30 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen2Destination
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
+import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen4Destination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun SignUpScreen(
+fun SignUpScreen3(
     email: String,
+    password: String,
+    name: String,
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SignUpViewModel = hiltViewModel()
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -40,7 +46,7 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Create a password",
+                    text = "Pick a username",
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -49,7 +55,7 @@ fun SignUpScreen(
                     onValueChange = { inputValue.value = it },
                     placeholder = {
                         Text(
-                            text = "Password",
+                            text = "Username",
                             modifier = Modifier
                                 .padding(start = 16.dp),
                             style = MaterialTheme.typography.titleMedium
@@ -62,9 +68,8 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
                         autoCorrect = false,
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Text
                     ),
-                    visualTransformation = PasswordVisualTransformation(),
                     textStyle = MaterialTheme.typography.bodyLarge,
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
@@ -77,16 +82,34 @@ fun SignUpScreen(
             }
         }
 
+        val state = viewModel.state.value
+        if (state.isLoading) {
+            Log.i("TAG", "SignUpScreen3: loading")
+        } else if (state.errors != null) {
+            Log.e("TAG", "SignUpScreen3: errors")
+        } else {
+            if (state.signUpResponse != null) {
+                navigator.navigate(
+                    SignUpScreen4Destination(
+                        name = name,
+                    )
+                )
+            }
+        }
+
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(56.dp),
             onClick = {
-                      navigator.navigate(SignUpScreen2Destination(
-                          email = email,
-                          password = inputValue.value.text)
-                      )
+                val user = SignUpRequest(
+                    username = inputValue.value.text,
+                    email = email,
+                    firstName = name,
+                    password = password
+                )
+                viewModel.signUpUser(user)
             },
             colors = ButtonDefaults.buttonColors
                 (contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,

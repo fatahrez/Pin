@@ -26,25 +26,29 @@ class SignUpViewModel @Inject constructor(
                     is ResultWrapper.Loading -> {
                         _state.value = state.value.copy(
                             signUpResponse = null,
-                            isLoading = true
+                            isLoading = true,
+                            errors = null
                         )
                     }
                     is ResultWrapper.Success -> {
                         _state.value = state.value.copy(
                             signUpResponse = result.value,
-                            isLoading = false
+                            isLoading = false,
+                            errors = null
                         )
                     }
                     is ResultWrapper.NetworkError -> {
                         _state.value = state.value.copy(
                             signUpResponse = null,
-                            isLoading = false
+                            isLoading = false,
+                            errors = "Unable make request, check your internet connection."
                         )
                     }
                     is ResultWrapper.GenericError -> {
                         _state.value = state.value.copy(
                             signUpResponse = null,
-                            isLoading = false
+                            isLoading = false,
+                            errors = result.error?.message
                         )
                     }
                 }

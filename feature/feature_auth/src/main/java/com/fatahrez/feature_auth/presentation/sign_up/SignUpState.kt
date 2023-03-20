@@ -4,5 +4,6 @@ import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
 
 data class SignUpState(
     val signUpResponse: SignUpResponse? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val errors: String? = null
 )

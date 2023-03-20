@@ -3,6 +3,7 @@ package com.fatahrez.feature_auth.presentation.onboarding
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -138,7 +140,7 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 )
             },
             modifier = Modifier
-                .padding(horizontal = 36.dp, vertical = 24.dp)
+                .padding(horizontal = 36.dp, vertical = 18.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(50)),
             keyboardOptions = KeyboardOptions(
@@ -174,7 +176,67 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
             )
         }
 
+        Spacer(modifier = Modifier.height(28.dp))
 
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(horizontal = 36.dp, vertical = 0.dp)
+                .clip(RoundedCornerShape(50)),
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.White,
+                containerColor = Color.Blue
+            ),
+            onClick = { /*TODO*/ }
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.facebook),
+                    contentDescription = "facebook icon",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+                Text(
+                    text = "Continue with Facebook",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .padding(horizontal = 36.dp, vertical = 0.dp)
+                .clip(RoundedCornerShape(50)),
+            colors = ButtonDefaults.buttonColors(
+                contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                containerColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
+            ),
+            onClick = { /*TODO*/ }
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.google),
+                    contentDescription = "google icon",
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(24.dp))
+                Text(
+                    text = "Continue with Google",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
     }
 }
 

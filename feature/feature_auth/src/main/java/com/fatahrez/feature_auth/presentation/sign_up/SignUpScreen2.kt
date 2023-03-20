@@ -1,6 +1,5 @@
 package com.fatahrez.feature_auth.presentation.sign_up
 
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,22 +8,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen2Destination
+import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen3Destination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun SignUpScreen(
+fun SignUpScreen2(
     email: String,
+    password: String,
     navigator: DestinationsNavigator
 ) {
 
@@ -40,7 +43,7 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Create a password",
+                    text = "What's your name?",
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -49,7 +52,7 @@ fun SignUpScreen(
                     onValueChange = { inputValue.value = it },
                     placeholder = {
                         Text(
-                            text = "Password",
+                            text = "Full name",
                             modifier = Modifier
                                 .padding(start = 16.dp),
                             style = MaterialTheme.typography.titleMedium
@@ -62,9 +65,8 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
                         autoCorrect = false,
-                        keyboardType = KeyboardType.Password
+                        keyboardType = KeyboardType.Text
                     ),
-                    visualTransformation = PasswordVisualTransformation(),
                     textStyle = MaterialTheme.typography.bodyLarge,
                     singleLine = true,
                     colors = TextFieldDefaults.textFieldColors(
@@ -83,10 +85,13 @@ fun SignUpScreen(
                 .padding(16.dp)
                 .height(56.dp),
             onClick = {
-                      navigator.navigate(SignUpScreen2Destination(
-                          email = email,
-                          password = inputValue.value.text)
-                      )
+                navigator.navigate(
+                    SignUpScreen3Destination(
+                        email = email,
+                        password = password,
+                        name = inputValue.value.text,
+                    )
+                )
             },
             colors = ButtonDefaults.buttonColors
                 (contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,
