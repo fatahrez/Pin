@@ -5,6 +5,21 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
+}
+
+kotlin {
+    sourceSets {
+        getByName("debug") {
+            kotlin.srcDir("build/generated/ksp/debug/kotlin")
+        }
+        getByName("release") {
+            kotlin.srcDir("build/generated/ksp/release/kotlin")
+        }
+        register("local") {
+            kotlin.srcDir("build/generated/ksp/local/kotlin")
+        }
+    }
 }
 
 android {
@@ -44,6 +59,13 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    applicationVariants.all {
+        kotlin.sourceSets {
+            getByName(name) {
+                kotlin.srcDir("build/generated/ksp/$name/kotlin")
+            }
+        }
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -90,6 +112,11 @@ dependencies {
     implementation(Dependencies.UI.materialDesign)
 
     implementation(Dependencies.ComposeUI.systemUiController)
+
+    // Navigation
+    implementation(Dependencies.Navigation.composeDestinationsCore)
+    ksp(Dependencies.Navigation.composeDestinationsKsp)
+    implementation(Dependencies.Navigation.navigationCompose)
 
     testImplementation(Dependencies.Testing.jUnit)
     androidTestImplementation(Dependencies.Testing.extJUnit)

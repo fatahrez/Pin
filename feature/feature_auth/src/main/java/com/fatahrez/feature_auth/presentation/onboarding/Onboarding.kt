@@ -1,6 +1,5 @@
 package com.fatahrez.feature_auth.presentation.onboarding
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -29,12 +28,19 @@ import coil.compose.AsyncImage
 import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
+import com.fatahrez.feature_auth.presentation.destinations.SignUpScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
-import kotlin.math.log
 
 @OptIn(ExperimentalFoundationApi::class)
+@RootNavGraph(start = true)
+@Destination
 @Composable
-fun Onboarding() {
+fun Onboarding(
+    navigator: DestinationsNavigator
+) {
     // Get screen height to give Lazy Grid an adaptive height
     val configuration = LocalConfiguration.current
     val height = configuration.screenHeightDp.dp
@@ -88,13 +94,13 @@ fun Onboarding() {
         }
         Spacer(modifier = Modifier.height(8.dp))
         WelcomeSection()
-        AuthSection(viewModel)
+        AuthSection(viewModel, navigator)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AuthSection(viewModel: EmailViewModel) {
+fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
     val inputValue = remember { mutableStateOf(TextFieldValue()) }
     Column(
         Modifier
@@ -146,7 +152,7 @@ fun AuthSection(viewModel: EmailViewModel) {
                 if(viewModel.state.value.emailResponse?.message == true) {
                     // TODO - Login
                 } else {
-                    // TODO - Sign Up
+                    navigator.navigate(SignUpScreenDestination(email = inputValue.value.text))
                 }
             }
         ) {

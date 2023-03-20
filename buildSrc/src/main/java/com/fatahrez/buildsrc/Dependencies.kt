@@ -19,6 +19,8 @@ object Versions {
     const val uiTestJunit = "1.4.0-beta01"
     const val coil = "2.2.2"
     const val systemUIController = "0.26.0-alpha"
+    const val destination = "1.8.36-beta"
+    const val navigation = "2.6.0-alpha07"
 }
 
 object Dependencies {
@@ -77,6 +79,12 @@ object Dependencies {
         val coil = "io.coil-kt:coil:${Versions.coil}"
         val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
         val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:${Versions.systemUIController}"
+    }
+
+    object Navigation {
+        val composeDestinationsCore= "io.github.raamcosta.compose-destinations:core:${Versions.destination}"
+        val composeDestinationsKsp= "io.github.raamcosta.compose-destinations:ksp:${Versions.destination}"
+        val navigationCompose = "androidx.navigation:navigation-compose:${Versions.navigation}"
     }
 
 }
