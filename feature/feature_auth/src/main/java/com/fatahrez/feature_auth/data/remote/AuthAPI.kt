@@ -1,9 +1,11 @@
 package com.fatahrez.feature_auth.data.remote
 
 import com.fatahrez.feature_auth.data.remote.dto.requests.EmailRequestDTO
+import com.fatahrez.feature_auth.data.remote.dto.requests.ProfileRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.requests.SignInRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.requests.SignUpRequestDTO
 import com.fatahrez.feature_auth.data.remote.dto.responses.EmailResponseDTO
+import com.fatahrez.feature_auth.data.remote.dto.responses.ProfileResponseDTO
 import com.fatahrez.feature_auth.data.remote.dto.responses.SignInResponseDTO
 import com.fatahrez.feature_auth.data.remote.dto.responses.SignUpResponseDTO
 import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
@@ -13,6 +15,7 @@ import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
 import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthAPI {
 
@@ -30,5 +33,11 @@ interface AuthAPI {
     suspend fun postRegisterUser(
         @Body signUpRequestDTO: SignUpRequestDTO
     ): SignUpResponseDTO
+
+    @POST("profile/update/{username}/")
+    suspend fun postProfile(
+        @Path("username") username: String,
+        @Body profileRequestDTO: ProfileRequestDTO
+    ): ProfileResponseDTO
 
 }

@@ -26,6 +26,8 @@ interface AuthRepository {
     ): Flow<ResultWrapper<SignUpResponse>>
 
     suspend fun postProfile(
+        username: String,
         profileRequest: ProfileRequest
     ): Flow<ResultWrapper<ProfileResponse>>
+
 }

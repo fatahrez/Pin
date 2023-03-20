@@ -4,9 +4,11 @@ import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.common.util.safeApiCall
 import com.fatahrez.feature_auth.data.remote.AuthAPI
 import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
+import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignInRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
+import com.fatahrez.feature_auth.domain.models.responses.ProfileResponse
 import com.fatahrez.feature_auth.domain.models.responses.SignInResponse
 import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
@@ -28,8 +30,16 @@ class AuthRepositoryImpl(
         authAPI.postSignIn(signInRequest.toSignInRequestDTO()).toSignInResponse()
     }
 
-    override suspend fun postRegisterUser(signUpRequest: SignUpRequest): Flow<ResultWrapper<SignUpResponse>>
-    = safeApiCall(ioDispatchers) {
+    override suspend fun postRegisterUser(signUpRequest: SignUpRequest):
+            Flow<ResultWrapper<SignUpResponse>> = safeApiCall(ioDispatchers) {
         authAPI.postRegisterUser(signUpRequest.toSignUpRequestDTO()).toSignUpResponse()
+    }
+
+    override suspend fun postProfile(username: String, profileRequest: ProfileRequest):
+            Flow<ResultWrapper<ProfileResponse>> = safeApiCall(ioDispatchers){
+        authAPI.postProfile(
+            username,
+            profileRequest.toProfileRequestDTO()
+        ).toProfileResponse()
     }
 }
