@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/feature_auth" />
+            <option value="$PROJECT_DIR$/feature/feature_refresh_token" />
           </set>
         </option>
       </GradleProjectSettings>

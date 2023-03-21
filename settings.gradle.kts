@@ -18,3 +18,4 @@ include (
         ":common",
         ":feature:feature_auth"
 )
+include(":feature:feature_refresh_token")
