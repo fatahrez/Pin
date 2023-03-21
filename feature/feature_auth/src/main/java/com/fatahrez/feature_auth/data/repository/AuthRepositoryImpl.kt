@@ -3,8 +3,11 @@ package com.fatahrez.feature_auth.data.repository
 import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.common.util.safeApiCall
 import com.fatahrez.feature_auth.data.remote.AuthAPI
+import com.fatahrez.feature_auth.domain.models.requests.EmailRequest
+import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
+import com.fatahrez.feature_auth.domain.models.requests.SignInRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
-import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
+import com.fatahrez.feature_auth.domain.models.responses.*
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +17,34 @@ class AuthRepositoryImpl(
     private val authAPI: AuthAPI,
     private val ioDispatchers: CoroutineDispatcher = Dispatchers.IO
 ): AuthRepository {
-    override suspend fun postRegisterUser(signUpRequest: SignUpRequest): Flow<ResultWrapper<SignUpResponse>>
-    = safeApiCall(ioDispatchers) {
+    override suspend fun postEmail(emailRequest: EmailRequest):
+            Flow<ResultWrapper<EmailResponse>> = safeApiCall(ioDispatchers) {
+        authAPI.postEmail(emailRequest.toEmailRequestDTO()).toEmailResponse()
+    }
+
+    override suspend fun postSignIn(signInRequest: SignInRequest):
+            Flow<ResultWrapper<SignInResponse>> = safeApiCall(ioDispatchers){
+        authAPI.postSignIn(signInRequest.toSignInRequestDTO()).toSignInResponse()
+    }
+
+    override suspend fun postRegisterUser(signUpRequest: SignUpRequest):
+            Flow<ResultWrapper<SignUpResponse>> = safeApiCall(ioDispatchers) {
         authAPI.postRegisterUser(signUpRequest.toSignUpRequestDTO()).toSignUpResponse()
     }
+
+    override suspend fun postProfile(username: String, profileRequest: ProfileRequest):
+            Flow<ResultWrapper<ProfileResponse>> = safeApiCall(ioDispatchers){
+        authAPI.postProfile(
+            username,
+            profileRequest.toProfileRequestDTO()
+        ).toProfileResponse()
+    }
+
+    override suspend fun getCountries():
+            Flow<ResultWrapper<List<CountryResponse>>> = safeApiCall(ioDispatchers) {
+        authAPI.getCountries().map {
+            it.toCountryResponse()
+        }
+    }
+
 }
