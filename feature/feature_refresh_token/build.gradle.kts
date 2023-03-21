@@ -3,6 +3,8 @@ import com.fatahrez.buildsrc.Dependencies
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -48,4 +50,12 @@ dependencies {
     implementation(platform(Dependencies.NetworkLibs.okHttpBOM))
     implementation(Dependencies.NetworkLibs.okHttp)
     implementation(Dependencies.NetworkLibs.loggingInterceptor)
+
+    //Hilt
+    implementation(Dependencies.HiltDI.hiltAndroid)
+    implementation(Dependencies.HiltDI.hiltWorker)
+    kapt(Dependencies.HiltDI.HiltCompiler)
+    kapt(Dependencies.HiltDI.daggerCompiler)
+    kapt(Dependencies.HiltDI.daggerHiltAndroidCompiler)
+    implementation(Dependencies.HiltDI.hiltNavigation)
 }
