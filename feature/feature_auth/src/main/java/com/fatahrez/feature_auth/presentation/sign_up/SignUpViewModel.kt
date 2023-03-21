@@ -5,11 +5,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fatahrez.common.util.Constants
 import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
+import com.fatahrez.feature_auth.presentation.sign_up.states.ProfileState
+import com.fatahrez.feature_auth.presentation.sign_up.states.SignUpState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

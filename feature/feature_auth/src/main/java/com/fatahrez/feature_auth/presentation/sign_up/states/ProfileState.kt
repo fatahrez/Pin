@@ -1,4 +1,4 @@
-package com.fatahrez.feature_auth.presentation.sign_up
+package com.fatahrez.feature_auth.presentation.sign_up.states
 
 import com.fatahrez.feature_auth.domain.models.responses.ProfileResponse
 
