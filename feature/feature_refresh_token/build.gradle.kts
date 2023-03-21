@@ -20,12 +20,24 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+            proguardFiles(getDefaultProguardFile(
+                "proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
+        }
+        getByName("debug") {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
+        }
+        register("local") {
+            initWith(getByName("debug"))
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2/api/v1/\"")
         }
     }
     compileOptions {
@@ -38,7 +50,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
 
     implementation(Dependencies.UI.coreKTX)
 

@@ -1,6 +1,6 @@
 package com.fatahrez.feature_refresh_token.di
 
-import com.fatahrez.common.util.Constants
+import com.fatahrez.feature_refresh_token.BuildConfig
 import com.fatahrez.feature_refresh_token.data.remote.RefreshTokenApi
 import com.fatahrez.feature_refresh_token.data.repository.RefreshTokenRepositoryImpl
 import com.fatahrez.feature_refresh_token.domain.repository.RefreshTokenRepository
@@ -30,7 +30,7 @@ object RefreshTokenModule {
     @Singleton
     fun providesRefreshTokenApi(okHttpClient: OkHttpClient): RefreshTokenApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()

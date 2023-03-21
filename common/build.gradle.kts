@@ -62,7 +62,7 @@ android {
 
 dependencies {
 
-    api(project(":feature:feature_refresh_token"))
+    implementation(project(":feature:feature_refresh_token"))
 
     implementation(Dependencies.UI.coreKTX)
     implementation(Dependencies.UI.materialDesign)

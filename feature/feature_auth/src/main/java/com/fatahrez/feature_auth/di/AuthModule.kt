@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.fatahrez.common.shared.remote.AuthInterceptor
 import com.fatahrez.common.shared.remote.HttpClient
 import com.fatahrez.common.shared.remote.HttpLogger
+import com.fatahrez.common.shared.remote.TokenAuthenticator
 import com.fatahrez.common.util.Constants
 import com.fatahrez.feature_auth.data.remote.AuthAPI
 import com.fatahrez.feature_auth.data.repository.AuthRepositoryImpl
@@ -44,11 +45,13 @@ object AuthModule {
     @Provides
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        authenticator: TokenAuthenticator
     ): OkHttpClient {
         return HttpClient.setupOkHttpClient(
             httpLoggingInterceptor,
-            authInterceptor
+            authInterceptor,
+            authenticator
         )
     }
 

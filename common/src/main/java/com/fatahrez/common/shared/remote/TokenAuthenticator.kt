@@ -22,8 +22,10 @@ class TokenAuthenticator @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        // exclude login url from TokenAuthenticator
-        if (response.request.url.toString() == Constants.BASE_URL+"auth/jwt/create/") {
+        // exclude login url or email url from TokenAuthenticator
+        if (response.request.url.toString() == Constants.BASE_URL+"auth/jwt/create/"
+            || response.request.url.toString() == Constants.BASE_URL+"auth/email/"
+        ) {
             return null
         }
         return runBlocking {

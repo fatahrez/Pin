@@ -16,6 +16,6 @@ rootProject.name = "Pin"
 include (
         ":app",
         ":common",
-        ":feature:feature_auth"
+        ":feature:feature_auth",
+        ":feature:feature_refresh_token"
 )
-include(":feature:feature_refresh_token")

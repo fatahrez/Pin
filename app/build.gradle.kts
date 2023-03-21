@@ -86,6 +86,7 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":feature:feature_auth"))
+    implementation(project(":feature:feature_refresh_token"))
 
     //Retrofit
     implementation(Dependencies.NetworkLibs.retrofit)
