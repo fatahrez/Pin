@@ -30,6 +30,7 @@ import coil.compose.AsyncImage
 import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
+import com.fatahrez.feature_auth.presentation.destinations.SignInScreenDestination
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreenDestination
 import com.fatahrez.feature_auth.presentation.onboarding.model.StaggeredListItem
 import com.ramcosta.composedestinations.annotation.Destination
@@ -114,7 +115,8 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
     } else {
         if (state.emailResponse != null) {
             if (state.emailResponse.message) {
-                Log.i("TAG", "AuthSection: login")
+                navigator
+                    .navigate(SignInScreenDestination(email = inputValue.value.text))
             } else {
                 navigator
                     .navigate(SignUpScreenDestination(email = inputValue.value.text))

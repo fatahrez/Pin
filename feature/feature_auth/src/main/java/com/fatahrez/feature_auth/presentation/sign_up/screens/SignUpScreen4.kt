@@ -1,4 +1,4 @@
-package com.fatahrez.feature_auth.presentation.sign_up
+package com.fatahrez.feature_auth.presentation.sign_up.screens
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*

@@ -1,6 +1,5 @@
-package com.fatahrez.feature_auth.presentation.sign_up
+package com.fatahrez.feature_auth.presentation.sign_up.screens
 
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -23,9 +22,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fatahrez.common.util.Constants
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen4Destination
+import com.fatahrez.feature_auth.presentation.sign_up.SignUpViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
