@@ -1,8 +1,6 @@
-package com.fatahrez.feature_auth.presentation.onboarding
+package com.fatahrez.feature_auth.presentation.onboarding.model
 
-import android.graphics.drawable.Drawable
 import androidx.compose.ui.unit.Dp
-import coil.request.ImageRequest
 
 data class StaggeredListItem(
     val height: Dp,

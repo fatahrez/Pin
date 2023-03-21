@@ -9,6 +9,7 @@ import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
+import com.fatahrez.feature_auth.presentation.sign_up.states.CountriesState
 import com.fatahrez.feature_auth.presentation.sign_up.states.ProfileState
 import com.fatahrez.feature_auth.presentation.sign_up.states.SignUpState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,8 @@ class SignUpViewModel @Inject constructor(
     private val _profileState = mutableStateOf(ProfileState())
     val profileState: State<ProfileState> get() = _profileState
 
+    private val _countriesState = mutableStateOf(CountriesState())
+    val countriesState: State<CountriesState> get() = _countriesState
     fun signUpUser(signUpRequest: SignUpRequest) {
         viewModelScope.launch {
             authRepository.postRegisterUser(signUpRequest).collect { result ->
@@ -61,6 +64,44 @@ class SignUpViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun getCountries() {
+        viewModelScope.launch {
+            authRepository.getCountries()
+                .collect { result ->
+                    when(result) {
+                        is ResultWrapper.Loading -> {
+                            _countriesState.value = countriesState.value.copy(
+                                countryResponse = emptyList(),
+                                isLoading = true,
+                                error = null
+                            )
+                        }
+                        is ResultWrapper.Success -> {
+                            _countriesState.value = countriesState.value.copy(
+                                countryResponse = result.value,
+                                isLoading = false,
+                                error = null
+                            )
+                        }
+                        is ResultWrapper.NetworkError -> {
+                            _countriesState.value = countriesState.value.copy(
+                                countryResponse = emptyList(),
+                                isLoading = false,
+                                error = "Unable make request, check your Internet connection."
+                            )
+                        }
+                        is ResultWrapper.GenericError -> {
+                            _countriesState.value = countriesState.value.copy(
+                                countryResponse = emptyList(),
+                                isLoading = false,
+                                error = result.error?.message
+                            )
+                        }
+                    }
+                }
         }
     }
 

@@ -1,21 +1,23 @@
 package com.fatahrez.feature_auth.presentation.sign_up
 
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen5Destination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -29,12 +31,16 @@ fun SignUpScreen6(
     gender: String,
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SignUpViewModel = hiltViewModel()
+    viewModel.getCountries()
+    val countriesState = viewModel.countriesState.value
 
+    var mSelectedText by remember { mutableStateOf("Mexico") }
+    var mExpanded by remember { mutableStateOf(false) }
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxSize()
     ) {
-        val inputValue = remember { mutableStateOf(TextFieldValue()) }
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -51,22 +57,22 @@ fun SignUpScreen6(
                             "We won't show it on your profile.",
                     style = MaterialTheme.typography.bodyLarge
                 )
+                if (countriesState.isLoading) {
+                    Log.i("TAG", "SignUpScreen6: loading...")
+                } else if (countriesState.error != null) {
+                    Log.e("TAG", "SignUpScreen6: ${countriesState.error}")
+                } else {
+                    Log.i("TAG", "SignUpScreen6: ${countriesState.countryResponse}")
+                }
 
                 OutlinedTextField(
-                    value = inputValue.value,
-                    onValueChange = { inputValue.value = it },
-                    placeholder = {
-                        Text(
-                            text = "Enter your age",
-                            modifier = Modifier
-                                .padding(start = 16.dp),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
+                    value = mSelectedText,
+                    onValueChange = { mSelectedText = it },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 18.dp)
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(30)),
+                    label = { Text(text = mSelectedText)},
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
                         autoCorrect = false,
@@ -81,6 +87,20 @@ fun SignUpScreen6(
                         disabledIndicatorColor = Color.Transparent
                     )
                 )
+                DropdownMenu(
+                    expanded = mExpanded,
+                    onDismissRequest = { mExpanded = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    countriesState.countryResponse.forEach { country ->
+                        DropdownMenuItem(text = {
+                            Text(text = country.name)
+                        }, onClick = {
+                            mSelectedText = country.name
+                            mExpanded = false
+                        })
+                    }
+                }
             }
         }
 
@@ -90,11 +110,14 @@ fun SignUpScreen6(
                 .padding(16.dp)
                 .height(56.dp),
             onClick = {
-                navigator.navigate(
-                    SignUpScreen5Destination(
-                        username = username,
-                        age = inputValue.value.text
-                    )
+                val profileRequest = ProfileRequest(
+                    age.toInt(),
+                    gender,
+                    mSelectedText
+                )
+                viewModel.postProfile(
+                    username,
+                    profileRequest
                 )
             },
             colors = ButtonDefaults.buttonColors(

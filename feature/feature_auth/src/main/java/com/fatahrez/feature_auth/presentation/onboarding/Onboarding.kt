@@ -3,7 +3,6 @@ package com.fatahrez.feature_auth.presentation.onboarding
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.staggeredgrid.*
@@ -32,6 +31,7 @@ import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreenDestination
+import com.fatahrez.feature_auth.presentation.onboarding.model.StaggeredListItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
