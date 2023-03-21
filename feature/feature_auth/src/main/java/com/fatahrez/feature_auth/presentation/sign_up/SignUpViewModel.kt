@@ -30,6 +30,11 @@ class SignUpViewModel @Inject constructor(
 
     private val _countriesState = mutableStateOf(CountriesState())
     val countriesState: State<CountriesState> get() = _countriesState
+
+    init {
+        getCountries()
+    }
+
     fun signUpUser(signUpRequest: SignUpRequest) {
         viewModelScope.launch {
             authRepository.postRegisterUser(signUpRequest).collect { result ->

@@ -1,10 +1,14 @@
 package com.fatahrez.feature_auth.presentation.sign_up
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,7 +36,6 @@ fun SignUpScreen6(
     navigator: DestinationsNavigator
 ) {
     val viewModel: SignUpViewModel = hiltViewModel()
-    viewModel.getCountries()
     val countriesState = viewModel.countriesState.value
 
     var mSelectedText by remember { mutableStateOf("Mexico") }
@@ -65,6 +68,11 @@ fun SignUpScreen6(
                     Log.i("TAG", "SignUpScreen6: ${countriesState.countryResponse}")
                 }
 
+                val icon = if (mExpanded)
+                    Icons.Filled.KeyboardArrowUp
+                else
+                    Icons.Filled.KeyboardArrowDown
+
                 OutlinedTextField(
                     value = mSelectedText,
                     onValueChange = { mSelectedText = it },
@@ -85,7 +93,11 @@ fun SignUpScreen6(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent
-                    )
+                    ),
+                    trailingIcon = {
+                        Icon(icon,"contentDescription",
+                            Modifier.clickable { mExpanded = !mExpanded })
+                    }
                 )
                 DropdownMenu(
                     expanded = mExpanded,

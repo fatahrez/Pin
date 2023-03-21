@@ -13,6 +13,7 @@ import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
 import com.fatahrez.feature_auth.domain.models.responses.SignUpResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -33,7 +34,7 @@ interface AuthAPI {
         @Body signUpRequestDTO: SignUpRequestDTO
     ): SignUpResponseDTO
 
-    @POST("profile/update/{username}/")
+    @PATCH("profile/update/{username}/")
     suspend fun postProfile(
         @Path("username") username: String,
         @Body profileRequestDTO: ProfileRequestDTO
