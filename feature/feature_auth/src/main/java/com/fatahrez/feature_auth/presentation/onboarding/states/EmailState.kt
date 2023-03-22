@@ -1,4 +1,4 @@
-package com.fatahrez.feature_auth.presentation.onboarding
+package com.fatahrez.feature_auth.presentation.onboarding.states
 
 import com.fatahrez.feature_auth.domain.models.responses.EmailResponse
 

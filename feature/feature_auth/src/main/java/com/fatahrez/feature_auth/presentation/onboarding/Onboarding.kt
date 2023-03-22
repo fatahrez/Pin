@@ -1,6 +1,7 @@
 package com.fatahrez.feature_auth.presentation.onboarding
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -19,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,11 +29,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.fatahrez.common.util.isValidEmail
 import com.fatahrez.common.util.verticalFadingEdge
 import kotlin.random.Random
 import com.fatahrez.feature_auth.R
 import com.fatahrez.feature_auth.presentation.destinations.SignInScreenDestination
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreenDestination
+import com.fatahrez.feature_auth.presentation.onboarding.events.EmailFormEvent
 import com.fatahrez.feature_auth.presentation.onboarding.model.StaggeredListItem
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
@@ -50,6 +54,23 @@ fun Onboarding(
     val height = configuration.screenHeightDp.dp
 
     val viewModel : EmailViewModel = hiltViewModel()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = context) {
+        viewModel.validationEvents.collect { event ->
+            when(event) {
+                is EmailViewModel.ValidationEvent.Success -> {
+                    val email = viewModel.emailValidationState.email
+                    viewModel.getEmailStatus(email)
+                    Toast.makeText(
+                        context,
+                        "Got email succesffully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 
     val lazyListState = rememberLazyStaggeredGridState()
     Column(
@@ -105,24 +126,11 @@ fun Onboarding(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
-    val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
 
     val state = viewModel.state.value
-    if(state.isLoading) {
-        Log.i("TAG", "AuthSection: loading")
-    } else if (state.errors != null){
-        Log.e("TAG", "AuthSection: ${state.errors}")
-    } else {
-        if (state.emailResponse != null) {
-            if (state.emailResponse.message) {
-                navigator
-                    .navigate(SignInScreenDestination(email = inputValue.value.text))
-            } else {
-                navigator
-                    .navigate(SignUpScreenDestination(email = inputValue.value.text))
-            }
-        }
-    }
+    val emailValidationState = viewModel.emailValidationState
+//    val context = LocalContext.current
 
     Column(
         Modifier
@@ -130,9 +138,28 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        if(state.isLoading) {
+            Log.i("TAG", "AuthSection: loading")
+        } else if (state.errors != null){
+            emailValidationState.emailError != null
+        } else {
+            if (state.emailResponse != null) {
+                if (state.emailResponse.message) {
+                    navigator
+                        .navigate(SignInScreenDestination(email = emailValidationState.email))
+                } else {
+                    navigator
+                        .navigate(SignUpScreenDestination(email = emailValidationState.email))
+                }
+            }
+        }
         TextField(
-            value = inputValue.value,
-            onValueChange = { inputValue.value = it },
+            value = emailValidationState.email,
+            onValueChange = {
+                viewModel.onEvent(EmailFormEvent.EmailChanged(it))
+            },
+            isError = emailValidationState.emailError != null,
             placeholder = {
                 Text(
                     text = "Email address",
@@ -146,8 +173,6 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(50)),
             keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
                 keyboardType = KeyboardType.Email
             ),
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -160,6 +185,12 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 disabledIndicatorColor = Color.Transparent
             )
         )
+        if (emailValidationState.emailError != null) {
+            Text(
+                text = emailValidationState.emailError,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
 
         Button(
             modifier = Modifier
@@ -169,7 +200,8 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 .clip(RoundedCornerShape(50)),
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             onClick = {
-                viewModel.getEmailStatus(inputValue.value.text)
+                Log.i("TAG", "AuthSection: ${viewModel.emailValidationState}")
+                viewModel.onEvent(EmailFormEvent.Submit)
             }
         ) {
             Text(

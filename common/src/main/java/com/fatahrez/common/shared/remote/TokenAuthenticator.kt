@@ -1,6 +1,7 @@
 package com.fatahrez.common.shared.remote
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import com.fatahrez.common.util.Constants
 import com.fatahrez.feature_refresh_token.data.repository.RefreshTokenRepositoryImpl
@@ -22,10 +23,12 @@ class TokenAuthenticator @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ): Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
+        Log.i("TAG", "authenticate: here")
         // exclude login url or email url from TokenAuthenticator
-        if (response.request.url.toString() == Constants.BASE_URL+"auth/jwt/create/"
-            || response.request.url.toString() == Constants.BASE_URL+"auth/email/"
-        ) {
+        if (response.request.url.toString() == Constants.BASE_URL+"auth/jwt/create/") {
+            return null
+        }
+        if (response.request.url.toString() == Constants.BASE_URL+"auth/email/") {
             return null
         }
         return runBlocking {

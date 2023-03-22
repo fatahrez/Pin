@@ -10,6 +10,7 @@ import com.fatahrez.common.util.Constants
 import com.fatahrez.feature_auth.data.remote.AuthAPI
 import com.fatahrez.feature_auth.data.repository.AuthRepositoryImpl
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
+import com.fatahrez.feature_auth.domain.use_case.ValidateEmail
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,6 +34,12 @@ object AuthModule {
         authAPI: AuthAPI
     ): AuthRepository {
         return AuthRepositoryImpl(authAPI)
+    }
+
+    @Provides
+    @Singleton
+    fun providesValidEmailUseCase(): ValidateEmail {
+        return ValidateEmail()
     }
 
     @Provides
