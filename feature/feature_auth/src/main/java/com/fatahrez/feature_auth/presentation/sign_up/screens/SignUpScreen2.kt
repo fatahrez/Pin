@@ -6,19 +6,25 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen2Destination
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen3Destination
+import com.fatahrez.feature_auth.presentation.onboarding.EmailViewModel
+import com.fatahrez.feature_auth.presentation.sign_up.SignUpViewModel
+import com.fatahrez.feature_auth.presentation.sign_up.events.SignUpFormEvent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -30,12 +36,31 @@ fun SignUpScreen2(
     password: String,
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SignUpViewModel = hiltViewModel()
+    val state = viewModel.nameValidationState
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = context) {
+        viewModel.nameValidationEvents.collect { event ->
+            when(event) {
+                is EmailViewModel.ValidationEvent.Success -> {
+                    navigator.navigate(
+                        SignUpScreen3Destination(
+                            email = email,
+                            password = password,
+                            name = state.name,
+                        )
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxSize()
     ) {
-        val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -48,8 +73,11 @@ fun SignUpScreen2(
                 )
 
                 OutlinedTextField(
-                    value = inputValue.value,
-                    onValueChange = { inputValue.value = it },
+                    value = state.name,
+                    onValueChange = {
+                        viewModel.onEvent(SignUpFormEvent.NameChanged(it))
+                    },
+                    isError = state.nameError != null,
                     placeholder = {
                         Text(
                             text = "Full name",
@@ -76,6 +104,12 @@ fun SignUpScreen2(
                         disabledIndicatorColor = Color.Transparent
                     )
                 )
+                if (state.nameError != null) {
+                    Text(
+                        text = state.nameError,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
 
@@ -85,13 +119,7 @@ fun SignUpScreen2(
                 .padding(16.dp)
                 .height(56.dp),
             onClick = {
-                navigator.navigate(
-                    SignUpScreen3Destination(
-                        email = email,
-                        password = password,
-                        name = inputValue.value.text,
-                    )
-                )
+                viewModel.onNameEvent(SignUpFormEvent.Submit)
             },
             colors = ButtonDefaults.buttonColors
                 (contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,

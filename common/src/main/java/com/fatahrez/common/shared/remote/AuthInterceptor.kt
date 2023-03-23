@@ -15,7 +15,9 @@ class AuthInterceptor @Inject constructor(
 
         return if (token.isNullOrEmpty()) {
             chain.proceed(request)
-        } else {
+        } else if (chain.request().url.toString() == Constants.BASE_URL+"auth/email/") {
+            chain.proceed(request)
+        }else {
             val newRequest = request.newBuilder().header(
                 "Authorization", "Bearer $token"
             ).build()

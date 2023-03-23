@@ -11,6 +11,8 @@ import com.fatahrez.feature_auth.data.remote.AuthAPI
 import com.fatahrez.feature_auth.data.repository.AuthRepositoryImpl
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
 import com.fatahrez.feature_auth.domain.use_case.ValidateEmail
+import com.fatahrez.feature_auth.domain.use_case.ValidateName
+import com.fatahrez.feature_auth.domain.use_case.ValidatePassword
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,8 +40,20 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun providesValidEmailUseCase(): ValidateEmail {
+    fun providesValidateEmailUseCase(): ValidateEmail {
         return ValidateEmail()
+    }
+
+    @Provides
+    @Singleton
+    fun providesValidatePasswordUseCase(): ValidatePassword {
+        return ValidatePassword()
+    }
+
+    @Provides
+    @Singleton
+    fun providesValidateNameUseCase(): ValidateName {
+        return ValidateName()
     }
 
     @Provides

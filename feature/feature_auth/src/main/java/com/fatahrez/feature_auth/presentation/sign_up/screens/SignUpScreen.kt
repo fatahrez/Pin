@@ -6,15 +6,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fatahrez.feature_auth.presentation.destinations.SignUpScreen2Destination
+import com.fatahrez.feature_auth.presentation.onboarding.EmailViewModel
+import com.fatahrez.feature_auth.presentation.sign_up.SignUpViewModel
+import com.fatahrez.feature_auth.presentation.sign_up.events.SignUpFormEvent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -25,12 +29,30 @@ fun SignUpScreen(
     email: String,
     navigator: DestinationsNavigator
 ) {
+    val viewModel: SignUpViewModel = hiltViewModel()
+    val state = viewModel.passwordValidationState
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = context) {
+        viewModel.signUpValidationEvents.collect { event ->
+            when(event) {
+                is EmailViewModel.ValidationEvent.Success -> {
+                    navigator.navigate(
+                        SignUpScreen2Destination(
+                            email = email,
+                            password = state.password
+                        )
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxSize()
     ) {
-        val inputValue = remember { mutableStateOf(TextFieldValue()) }
+
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -43,8 +65,11 @@ fun SignUpScreen(
                 )
 
                 OutlinedTextField(
-                    value = inputValue.value,
-                    onValueChange = { inputValue.value = it },
+                    value = state.password,
+                    onValueChange = {
+                        viewModel.onEvent(SignUpFormEvent.PasswordChanged(it))
+                    },
+                    isError = state.passwordError != null,
                     placeholder = {
                         Text(
                             text = "Password",
@@ -72,6 +97,12 @@ fun SignUpScreen(
                         disabledIndicatorColor = Color.Transparent
                     )
                 )
+                if (state.passwordError != null) {
+                    Text(
+                        text = state.passwordError,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
 
@@ -81,10 +112,7 @@ fun SignUpScreen(
                 .padding(16.dp)
                 .height(56.dp),
             onClick = {
-                      navigator.navigate(SignUpScreen2Destination(
-                          email = email,
-                          password = inputValue.value.text)
-                      )
+                viewModel.onEvent(SignUpFormEvent.Submit)
             },
             colors = ButtonDefaults.buttonColors
                 (contentColor = if (isSystemInDarkTheme()) Color.White else Color.Black,

@@ -2,28 +2,37 @@ package com.fatahrez.feature_auth.presentation.sign_up
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fatahrez.common.util.ResultWrapper
 import com.fatahrez.feature_auth.domain.models.requests.ProfileRequest
 import com.fatahrez.feature_auth.domain.models.requests.SignUpRequest
 import com.fatahrez.feature_auth.domain.repository.AuthRepository
-import com.fatahrez.feature_auth.presentation.sign_up.states.CountriesState
-import com.fatahrez.feature_auth.presentation.sign_up.states.ProfileState
-import com.fatahrez.feature_auth.presentation.sign_up.states.SignUpState
+import com.fatahrez.feature_auth.domain.use_case.ValidateName
+import com.fatahrez.feature_auth.domain.use_case.ValidatePassword
+import com.fatahrez.feature_auth.presentation.onboarding.EmailViewModel
+import com.fatahrez.feature_auth.presentation.sign_up.events.SignUpFormEvent
+import com.fatahrez.feature_auth.presentation.sign_up.states.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    val sharedPreferences: SharedPreferences
+    val sharedPreferences: SharedPreferences,
+    private val validatePassword: ValidatePassword,
+    private val validateName: ValidateName
 ): ViewModel() {
 
     private val _state = mutableStateOf(SignUpState())
     val state: State<SignUpState> get() = _state
+
 
     private val _profileState = mutableStateOf(ProfileState())
     val profileState: State<ProfileState> get() = _profileState
@@ -31,8 +40,89 @@ class SignUpViewModel @Inject constructor(
     private val _countriesState = mutableStateOf(CountriesState())
     val countriesState: State<CountriesState> get() = _countriesState
 
+    var passwordValidationState by mutableStateOf(PasswordValidationState())
+    var nameValidationState by mutableStateOf(NameValidationState())
+
+    private var signUpValidationEventChannel = Channel<EmailViewModel.ValidationEvent>()
+    val signUpValidationEvents = signUpValidationEventChannel.receiveAsFlow()
+
+    private var nameValidationEventChannel = Channel<EmailViewModel.ValidationEvent>()
+    val nameValidationEvents = nameValidationEventChannel.receiveAsFlow()
+
     init {
         getCountries()
+    }
+
+    fun onEvent(event: SignUpFormEvent) {
+        when(event) {
+            is SignUpFormEvent.PasswordChanged -> {
+                passwordValidationState = passwordValidationState.copy(
+                    password = event.password
+                )
+            }
+            is SignUpFormEvent.NameChanged -> {
+                nameValidationState = nameValidationState.copy(
+                    name = event.name
+                )
+            }
+            is SignUpFormEvent.Submit -> {
+                submitData()
+            }
+        }
+    }
+
+    fun onNameEvent(event: SignUpFormEvent) {
+        when(event) {
+            is SignUpFormEvent.PasswordChanged -> {
+                passwordValidationState = passwordValidationState.copy(
+                    password = event.password
+                )
+            }
+            is SignUpFormEvent.NameChanged -> {
+                nameValidationState = nameValidationState.copy(
+                    name = event.name
+                )
+            }
+            is SignUpFormEvent.Submit -> {
+                submitNameData()
+            }
+        }
+    }
+
+    private fun submitNameData() {
+        val nameResult = validateName(nameValidationState.name)
+
+        val hasError = listOf(
+            nameResult
+        ).any { !it.successful }
+
+        if (hasError) {
+            nameValidationState = nameValidationState.copy(
+                nameError = nameResult.errorMessage
+            )
+            return
+        }
+        viewModelScope.launch {
+            nameValidationEventChannel.send(EmailViewModel.ValidationEvent.Success)
+        }
+    }
+
+    private fun submitData() {
+        val passwordResult = validatePassword(passwordValidationState.password)
+
+        val hasError = listOf(
+            passwordResult
+        ).any { !it.successful }
+
+        if(hasError) {
+            passwordValidationState = passwordValidationState.copy(
+                passwordError = passwordResult.errorMessage
+            )
+            return
+        }
+        viewModelScope.launch {
+            signUpValidationEventChannel.send(EmailViewModel.ValidationEvent.Success)
+        }
     }
 
     fun signUpUser(signUpRequest: SignUpRequest) {

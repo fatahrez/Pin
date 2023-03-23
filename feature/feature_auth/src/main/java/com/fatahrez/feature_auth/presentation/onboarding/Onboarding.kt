@@ -173,6 +173,8 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(50)),
             keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrect = false,
                 keyboardType = KeyboardType.Email
             ),
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -200,7 +202,6 @@ fun AuthSection(viewModel: EmailViewModel, navigator: DestinationsNavigator) {
                 .clip(RoundedCornerShape(50)),
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
             onClick = {
-                Log.i("TAG", "AuthSection: ${viewModel.emailValidationState}")
                 viewModel.onEvent(EmailFormEvent.Submit)
             }
         ) {
